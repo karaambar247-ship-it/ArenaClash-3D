@@ -17,7 +17,6 @@ function show(el) { el.classList.remove('hidden'); }
 function hide(el) { el.classList.add('hidden'); }
 
 async function boot() {
-  // Yukleme animasyonu
   let p = 0;
   const interval = setInterval(() => {
     p += 10;
@@ -42,11 +41,11 @@ async function boot() {
   }
 }
 
-document.getElementById('google-login-btn').addEventListener('click', async () => {
+document.getElementById('anon-login-btn').addEventListener('click', async () => {
   const errEl = document.getElementById('login-error');
   errEl.textContent = '';
   try {
-    await authManager.loginWithGoogle();
+    await authManager.loginAnonymous();
     hide(loginScreen);
     openMainMenu();
   } catch (err) {
@@ -63,6 +62,7 @@ function openMainMenu() {
   document.getElementById('level').textContent = profile.level || 1;
   const photo = document.getElementById('profile-photo');
   if (profile.profilePhoto) photo.src = profile.profilePhoto;
+  else photo.style.display = 'none';
 
   show(mainMenu);
 }
@@ -80,7 +80,6 @@ document.getElementById('play-btn').addEventListener('click', () => {
 
 function startGame() {
   show(gameUI);
-  // Mobil kontrol goster
   if ('ontouchstart' in window) {
     document.getElementById('mobile-controls').classList.remove('hidden');
   }
@@ -108,9 +107,7 @@ function endGame(won) {
     gameScene = null;
   }
   hide(gameUI);
-  // Simdilik direkt menuye don
   openMainMenu();
 }
 
-// Baslat
 boot();

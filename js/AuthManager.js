@@ -1,12 +1,11 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { firebaseConfig } from './FirebaseConfig.js';
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
 
 export class AuthManager {
   constructor() {
@@ -26,15 +25,15 @@ export class AuthManager {
     });
   }
 
-  async loginWithGoogle() {
+  async loginAnonymous() {
     try {
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInAnonymously(auth);
       this.user = result.user;
       this.profile = await this.loadOrCreateProfile(result.user);
       return this.profile;
     } catch (err) {
-      console.error('Google giris hatasi:', err);
-      throw new Error('Google ile giris yapilamadi.');
+      console.error('Anonim giris hatasi:', err);
+      throw new Error('Giris yapilamadi. Firebase Auth ayarlarini kontrol et.');
     }
   }
 
@@ -53,10 +52,11 @@ export class AuthManager {
     }
 
     // Yeni oyuncu profili
+    const randomName = 'Oyuncu_' + Math.floor(Math.random() * 9000 + 1000);
     const newProfile = {
       uid: user.uid,
-      displayName: user.displayName || 'Oyuncu',
-      profilePhoto: user.photoURL || '',
+      displayName: randomName,
+      profilePhoto: '',
       createdAt: serverTimestamp(),
       level: 1,
       xp: 0,
