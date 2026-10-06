@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ArenaClash 3D</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Loading -->
+  <div id="loading-screen">
+    <div class="logo">ArenaClash</div>
+    <div class="progress-bar"><div id="progress"></div></div>
+    <div id="loading-text">Yukleniyor...</div>
+  </div>
+
+  <!-- Login -->
+  <div id="login-screen" class="hidden">
+    <h1>ArenaClash</h1>
+    <p>3D Arena Savas</p>
+    <button id="google-login-btn">Google ile Giris Yap</button>
+    <p id="login-error" class="error"></p>
+  </div>
+
+  <!-- Main Menu -->
+  <div id="main-menu" class="hidden">
+    <div class="menu-left">
+      <div class="profile-card">
+        <img id="profile-photo" src="" alt="Profil" />
+        <div>
+          <h2 id="display-name">Oyuncu</h2>
+          <p>Kupa: <span id="trophies">0</span> | Seviye: <span id="level">1</span></p>
+        </div>
+      </div>
+      <button id="play-btn" class="big-btn">OYNA</button>
+      <button id="logout-btn">Cikis Yap</button>
+    </div>
+    <div class="menu-right">
+      <div id="character-preview"></div>
+      <p>Karakter: <span id="selected-char">Blitz</span></p>
+    </div>
+  </div>
+
+  <!-- Game UI -->
+  <div id="game-ui" class="hidden">
+    <div id="hud">
+      <div id="ping">PING: --</div>
+      <div id="hp-bar"><div id="hp-fill"></div></div>
+      <div id="super-bar"><div id="super-fill"></div></div>
+    </div>
+    <div id="mobile-controls" class="hidden">
+      <div id="joystick-move" class="joystick"></div>
+      <div id="joystick-aim" class="joystick"></div>
+      <button id="btn-attack">SALDIR</button>
+      <button id="btn-super">SUPER</button>
+      <button id="btn-gadget">GADGET</button>
+    </div>
+    <button id="btn-menu">ESC</button>
+  </div>
+
+  <!-- Match Result -->
+  <div id="result-screen" class="hidden">
+    <h1 id="result-title">ZAFER!</h1>
+    <div id="result-stats"></div>
+    <button id="btn-continue">Devam</button>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
