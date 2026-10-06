@@ -26,15 +26,24 @@
   <div id="login-screen" class="hidden">
     <h1>ArenaClash</h1>
     <p>3D Arena Savas</p>
-    <button id="anon-login-btn">Misafir Olarak Gir</button>
+    <input type="text" id="player-name" placeholder="Ismini yaz..." maxlength="16" autocomplete="off" />
+    <button id="anon-login-btn">Gir</button>
     <p id="login-error" class="error"></p>
+  </div>
+
+  <!-- Landscape uyarisi -->
+  <div id="rotate-warning" class="hidden">
+    <div class="rotate-box">
+      <div class="phone-icon">📱</div>
+      <p>Telefonu <b>yatay</b> cevir</p>
+    </div>
   </div>
 
   <!-- Main Menu -->
   <div id="main-menu" class="hidden">
     <div class="menu-left">
       <div class="profile-card">
-        <img id="profile-photo" src="" alt="Profil" />
+        <img id="profile-photo" src="" alt="" />
         <div>
           <h2 id="display-name">Oyuncu</h2>
           <p>Kupa: <span id="trophies">0</span> | Seviye: <span id="level">1</span></p>
@@ -63,7 +72,7 @@
       <button id="btn-super">SUPER</button>
       <button id="btn-gadget">GADGET</button>
     </div>
-    <button id="btn-menu">ESC</button>
+    <button id="btn-menu">MENU</button>
   </div>
 
   <!-- Match Result -->

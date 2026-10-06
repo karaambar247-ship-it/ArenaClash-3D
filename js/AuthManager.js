@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { firebaseConfig } from './FirebaseConfig.js';
 
 const app = initializeApp(firebaseConfig);
@@ -25,14 +25,14 @@ export class AuthManager {
     });
   }
 
-  async loginAnonymous() {
+  async loginWithName(name) {
     try {
       const result = await signInAnonymously(auth);
       this.user = result.user;
-      this.profile = await this.loadOrCreateProfile(result.user);
+      this.profile = await this.loadOrCreateProfile(result.user, name);
       return this.profile;
     } catch (err) {
-      console.error('Anonim giris hatasi:', err);
+      console.error('Giris hatasi:', err);
       throw new Error('Giris yapilamadi. Firebase Auth ayarlarini kontrol et.');
     }
   }
@@ -43,19 +43,24 @@ export class AuthManager {
     this.profile = null;
   }
 
-  async loadOrCreateProfile(user) {
+  async loadOrCreateProfile(user, name) {
     const ref = doc(db, 'players', user.uid);
     const snap = await getDoc(ref);
 
     if (snap.exists()) {
-      return snap.data();
+      const data = snap.data();
+      // Isim degistiyse guncelle
+      if (name && name !== data.displayName) {
+        await updateDoc(ref, { displayName: name });
+        data.displayName = name;
+      }
+      return data;
     }
 
-    // Yeni oyuncu profili
-    const randomName = 'Oyuncu_' + Math.floor(Math.random() * 9000 + 1000);
+    const displayName = name || ('Oyuncu_' + Math.floor(Math.random() * 9000 + 1000));
     const newProfile = {
       uid: user.uid,
-      displayName: randomName,
+      displayName: displayName,
       profilePhoto: '',
       createdAt: serverTimestamp(),
       level: 1,

@@ -10,11 +10,32 @@ const loginScreen = document.getElementById('login-screen');
 const mainMenu = document.getElementById('main-menu');
 const gameUI = document.getElementById('game-ui');
 const resultScreen = document.getElementById('result-screen');
+const rotateWarning = document.getElementById('rotate-warning');
 const progress = document.getElementById('progress');
 const loadingText = document.getElementById('loading-text');
+const nameInput = document.getElementById('player-name');
 
 function show(el) { el.classList.remove('hidden'); }
 function hide(el) { el.classList.add('hidden'); }
+
+// Yatay kontrol
+function checkOrientation() {
+  const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (!isMobile) {
+    hide(rotateWarning);
+    return true;
+  }
+  const isLandscape = window.innerWidth > window.innerHeight;
+  if (isLandscape) {
+    hide(rotateWarning);
+    return true;
+  } else {
+    show(rotateWarning);
+    return false;
+  }
+}
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 100));
 
 async function boot() {
   let p = 0;
@@ -34,24 +55,36 @@ async function boot() {
       openMainMenu();
     } else {
       show(loginScreen);
+      nameInput.focus();
     }
+    checkOrientation();
   } catch (err) {
     loadingText.textContent = 'Sunucuya baglanilamadi. Internet baglantinizi kontrol edin.';
     console.error(err);
   }
 }
 
-document.getElementById('anon-login-btn').addEventListener('click', async () => {
+document.getElementById('anon-login-btn').addEventListener('click', doLogin);
+nameInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
   const errEl = document.getElementById('login-error');
   errEl.textContent = '';
+  const name = nameInput.value.trim();
+  if (!name || name.length < 2) {
+    errEl.textContent = 'En az 2 harf yaz lan';
+    return;
+  }
   try {
-    await authManager.loginAnonymous();
+    await authManager.loginWithName(name);
     hide(loginScreen);
     openMainMenu();
   } catch (err) {
     errEl.textContent = err.message;
   }
-});
+}
 
 function openMainMenu() {
   const profile = authManager.getProfile();
@@ -60,20 +93,21 @@ function openMainMenu() {
   document.getElementById('display-name').textContent = profile.displayName;
   document.getElementById('trophies').textContent = profile.trophies || 0;
   document.getElementById('level').textContent = profile.level || 1;
-  const photo = document.getElementById('profile-photo');
-  if (profile.profilePhoto) photo.src = profile.profilePhoto;
-  else photo.style.display = 'none';
 
   show(mainMenu);
+  checkOrientation();
 }
 
 document.getElementById('logout-btn').addEventListener('click', async () => {
   await authManager.logout();
   hide(mainMenu);
   show(loginScreen);
+  nameInput.value = '';
+  nameInput.focus();
 });
 
 document.getElementById('play-btn').addEventListener('click', () => {
+  if (!checkOrientation()) return; // dikeyse oynatma
   hide(mainMenu);
   startGame();
 });

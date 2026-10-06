@@ -12,17 +12,33 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a12; f
 #progress { height: 100%; width: 0%; background: #ff6b35; transition: width 0.3s; }
 
 #login-screen h1 { font-size: 2.8rem; color: #ff6b35; margin-bottom: 0.5rem; }
-#login-screen p { opacity: 0.7; margin-bottom: 2rem; }
-#google-login-btn {
-  background: #fff; color: #333; border: none; padding: 14px 28px; font-size: 1.1rem; font-weight: 600;
-  border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+#login-screen p { opacity: 0.7; margin-bottom: 1.5rem; }
+#player-name {
+  width: 80%; max-width: 280px; padding: 14px 18px; font-size: 1.2rem; border: none;
+  border-radius: 10px; background: #222; color: #fff; text-align: center; margin-bottom: 1rem;
+  outline: none; border: 2px solid #444;
 }
-#google-login-btn:hover { background: #f0f0f0; }
+#player-name:focus { border-color: #ff6b35; }
+#anon-login-btn {
+  background: linear-gradient(90deg, #ff6b35, #f7c948); color: #000; border: none;
+  padding: 14px 50px; font-size: 1.3rem; font-weight: 800; border-radius: 10px; cursor: pointer;
+}
+#anon-login-btn:hover { transform: scale(1.05); }
 .error { color: #ff4444; margin-top: 1rem; }
+
+/* Yatay uyari */
+#rotate-warning {
+  position: absolute; inset: 0; z-index: 200; background: #0a0a12;
+  display: flex; align-items: center; justify-content: center;
+}
+.rotate-box { text-align: center; }
+.phone-icon { font-size: 4rem; margin-bottom: 1rem; animation: spin 2s infinite; }
+@keyframes spin { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(90deg)} }
+.rotate-box p { font-size: 1.4rem; }
 
 #main-menu { flex-direction: row; gap: 4rem; padding: 2rem; }
 .profile-card { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
-.profile-card img { width: 64px; height: 64px; border-radius: 50%; border: 3px solid #ff6b35; }
+.profile-card img { width: 64px; height: 64px; border-radius: 50%; border: 3px solid #ff6b35; display: none; }
 .big-btn {
   background: linear-gradient(90deg, #ff6b35, #f7c948); color: #000; border: none;
   padding: 18px 60px; font-size: 1.5rem; font-weight: 900; border-radius: 12px; cursor: pointer;
@@ -40,19 +56,19 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a12; f
 
 #mobile-controls { position: absolute; inset: 0; pointer-events: none; }
 .joystick {
-  position: absolute; width: 120px; height: 120px; border-radius: 50%;
+  position: absolute; width: 110px; height: 110px; border-radius: 50%;
   background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
   pointer-events: auto;
 }
-#joystick-move { bottom: 40px; left: 40px; }
-#joystick-aim { bottom: 40px; right: 40px; }
+#joystick-move { bottom: 30px; left: 30px; }
+#joystick-aim { bottom: 30px; right: 30px; }
 #btn-attack, #btn-super, #btn-gadget {
-  position: absolute; width: 70px; height: 70px; border-radius: 50%; border: none;
-  font-weight: 700; font-size: 0.7rem; pointer-events: auto; color: #fff;
+  position: absolute; width: 64px; height: 64px; border-radius: 50%; border: none;
+  font-weight: 700; font-size: 0.65rem; pointer-events: auto; color: #fff;
 }
-#btn-attack { bottom: 180px; right: 50px; background: #ff4444; }
-#btn-super { bottom: 180px; right: 140px; background: #ffcc00; color: #000; }
-#btn-gadget { bottom: 100px; right: 140px; background: #44aaff; }
+#btn-attack { bottom: 160px; right: 40px; background: #ff4444; }
+#btn-super { bottom: 160px; right: 120px; background: #ffcc00; color: #000; }
+#btn-gadget { bottom: 90px; right: 120px; background: #44aaff; }
 #btn-menu { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); border: 1px solid #666; color: #fff; padding: 6px 12px; border-radius: 6px; pointer-events: auto; }
 
 #result-screen h1 { font-size: 3rem; margin-bottom: 1.5rem; }
@@ -62,4 +78,5 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a12; f
 
 @media (min-width: 768px) {
   #mobile-controls { display: none !important; }
+  #rotate-warning { display: none !important; }
 }
